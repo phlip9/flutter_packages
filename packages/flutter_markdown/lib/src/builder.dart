@@ -284,7 +284,7 @@ class MarkdownBuilder implements md.NodeVisitor {
       final TextStyle parentStyle = _inlines.last.style!;
       _inlines.add(_InlineElement(
         tag,
-        style: parentStyle.merge(styleSheet.styles[tag]),
+        style: parentStyle.merge(styleSheet.style(tag)),
       ));
     }
 
@@ -344,7 +344,7 @@ class MarkdownBuilder implements md.NodeVisitor {
     Widget? child;
     if (_blocks.isNotEmpty && builders.containsKey(_blocks.last.tag)) {
       child = builders[_blocks.last.tag!]!
-          .visitText(text, styleSheet.styles[_blocks.last.tag!]);
+          .visitText(text, styleSheet.style(_blocks.last.tag!));
     } else if (_blocks.last.tag == 'pre') {
       final ScrollController preScrollController = ScrollController();
       child = Scrollbar(
@@ -485,7 +485,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         final Widget? child = builders[tag]!.visitElementAfterWithContext(
           delegate.context,
           element,
-          styleSheet.styles[tag],
+          styleSheet.style(tag),
           parent.style,
         );
         if (child != null) {
@@ -696,7 +696,7 @@ class MarkdownBuilder implements md.NodeVisitor {
     if (_inlines.isEmpty) {
       _inlines.add(_InlineElement(
         tag,
-        style: styleSheet.styles[tag!],
+        style: styleSheet.style(tag!),
       ));
     }
   }

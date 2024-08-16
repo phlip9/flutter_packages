@@ -18,7 +18,7 @@ void defineTests() {
         const String data = 'Hello';
         await tester.pumpWidget(
           boilerplate(
-            MarkdownBody(
+            const MarkdownBody(
               styleSheet: MarkdownStyleSheet(textScaler: scaler),
               data: data,
             ),

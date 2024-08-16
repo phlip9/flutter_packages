@@ -208,9 +208,9 @@ void defineTests() {
         final ThemeData theme =
             ThemeData.light().copyWith(textTheme: textTheme);
         final MarkdownStyleSheet style1 = MarkdownStyleSheet.fromTheme(theme);
-        final MarkdownStyleSheet style2 = MarkdownStyleSheet(
-          p: const TextStyle(color: Colors.red),
-          blockquote: const TextStyle(fontSize: 16),
+        const MarkdownStyleSheet style2 = MarkdownStyleSheet(
+          p: TextStyle(color: Colors.red),
+          blockquote: TextStyle(fontSize: 16),
         );
 
         final MarkdownStyleSheet merged = style1.merge(style2);
@@ -277,13 +277,12 @@ void defineTests() {
       'use stylesheet option listBulletPadding',
       (WidgetTester tester) async {
         const double paddingX = 20.0;
-        final MarkdownStyleSheet style = MarkdownStyleSheet(
-            listBulletPadding:
-                const EdgeInsets.symmetric(horizontal: paddingX));
+        const MarkdownStyleSheet style = MarkdownStyleSheet(
+            listBulletPadding: EdgeInsets.symmetric(horizontal: paddingX));
 
         await tester.pumpWidget(
           boilerplate(
-            Markdown(
+            const Markdown(
               data: '1. Bullet\n 2. Bullet\n * Bullet',
               styleSheet: style,
             ),
@@ -308,11 +307,11 @@ void defineTests() {
       (WidgetTester tester) async {
         const String data = '# Header';
         const double paddingX = 20.0;
-        final MarkdownStyleSheet style = MarkdownStyleSheet(
-          h1Padding: const EdgeInsets.symmetric(horizontal: paddingX),
+        const MarkdownStyleSheet style = MarkdownStyleSheet(
+          h1Padding: EdgeInsets.symmetric(horizontal: paddingX),
         );
 
-        await tester.pumpWidget(boilerplate(MarkdownBody(
+        await tester.pumpWidget(boilerplate(const MarkdownBody(
           data: data,
           styleSheet: style,
         )));
@@ -337,13 +336,13 @@ void defineTests() {
       'use stylesheet option pPadding',
       (WidgetTester tester) async {
         const double paddingX = 20.0;
-        final MarkdownStyleSheet style = MarkdownStyleSheet(
-          pPadding: const EdgeInsets.symmetric(horizontal: paddingX),
+        const MarkdownStyleSheet style = MarkdownStyleSheet(
+          pPadding: EdgeInsets.symmetric(horizontal: paddingX),
         );
 
         await tester.pumpWidget(
           boilerplate(
-            Markdown(
+            const Markdown(
               data: 'Test line 1\n\nTest line 2\n\nTest line 3\n# H1',
               styleSheet: style,
             ),
@@ -367,18 +366,18 @@ void defineTests() {
       'use stylesheet option h1Padding-h6Padding',
       (WidgetTester tester) async {
         const double paddingX = 20.0;
-        final MarkdownStyleSheet style = MarkdownStyleSheet(
-          h1Padding: const EdgeInsets.symmetric(horizontal: paddingX),
-          h2Padding: const EdgeInsets.symmetric(horizontal: paddingX),
-          h3Padding: const EdgeInsets.symmetric(horizontal: paddingX),
-          h4Padding: const EdgeInsets.symmetric(horizontal: paddingX),
-          h5Padding: const EdgeInsets.symmetric(horizontal: paddingX),
-          h6Padding: const EdgeInsets.symmetric(horizontal: paddingX),
+        const MarkdownStyleSheet style = MarkdownStyleSheet(
+          h1Padding: EdgeInsets.symmetric(horizontal: paddingX),
+          h2Padding: EdgeInsets.symmetric(horizontal: paddingX),
+          h3Padding: EdgeInsets.symmetric(horizontal: paddingX),
+          h4Padding: EdgeInsets.symmetric(horizontal: paddingX),
+          h5Padding: EdgeInsets.symmetric(horizontal: paddingX),
+          h6Padding: EdgeInsets.symmetric(horizontal: paddingX),
         );
 
         await tester.pumpWidget(
           boilerplate(
-            Markdown(
+            const Markdown(
               data:
                   'Test\n\n# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6\n',
               styleSheet: style,
@@ -396,66 +395,6 @@ void defineTests() {
           ),
           true,
         );
-      },
-    );
-
-    testWidgets(
-      'deprecated textScaleFactor is converted to linear scaler',
-      (WidgetTester tester) async {
-        const double scaleFactor = 2.0;
-        final MarkdownStyleSheet style = MarkdownStyleSheet(
-          textScaleFactor: scaleFactor,
-        );
-
-        expect(style.textScaler, const TextScaler.linear(scaleFactor));
-        expect(style.textScaleFactor, scaleFactor);
-      },
-    );
-
-    testWidgets(
-      'deprecated textScaleFactor is null when a scaler is provided',
-      (WidgetTester tester) async {
-        const TextScaler scaler = TextScaler.linear(2.0);
-        final MarkdownStyleSheet style = MarkdownStyleSheet(
-          textScaler: scaler,
-        );
-
-        expect(style.textScaler, scaler);
-        expect(style.textScaleFactor, null);
-      },
-    );
-
-    testWidgets(
-      'copyWith textScaler overwrites both textScaler and textScaleFactor',
-      (WidgetTester tester) async {
-        final MarkdownStyleSheet original = MarkdownStyleSheet(
-          textScaleFactor: 2.0,
-        );
-
-        const TextScaler newScaler = TextScaler.linear(3.0);
-        final MarkdownStyleSheet copy = original.copyWith(
-          textScaler: newScaler,
-        );
-
-        expect(copy.textScaler, newScaler);
-        expect(copy.textScaleFactor, null);
-      },
-    );
-
-    testWidgets(
-      'copyWith textScaleFactor overwrites both textScaler and textScaleFactor',
-      (WidgetTester tester) async {
-        final MarkdownStyleSheet original = MarkdownStyleSheet(
-          textScaleFactor: 2.0,
-        );
-
-        const double newScaleFactor = 3.0;
-        final MarkdownStyleSheet copy = original.copyWith(
-          textScaleFactor: newScaleFactor,
-        );
-
-        expect(copy.textScaler, const TextScaler.linear(newScaleFactor));
-        expect(copy.textScaleFactor, newScaleFactor);
       },
     );
   });

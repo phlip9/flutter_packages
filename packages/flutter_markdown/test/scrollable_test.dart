@@ -119,12 +119,12 @@ void defineTests() {
             '\n|Col 1|Col 2|Col 3|';
         await tester.pumpWidget(
           boilerplate(
-            MediaQuery(
-              data: const MediaQueryData(),
+            const MediaQuery(
+              data: MediaQueryData(),
               child: MarkdownBody(
                 data: data,
                 styleSheet: MarkdownStyleSheet(
-                  tableColumnWidth: const FixedColumnWidth(150),
+                  tableColumnWidth: FixedColumnWidth(150),
                 ),
               ),
             ),
@@ -152,12 +152,12 @@ void defineTests() {
 
         await tester.pumpWidget(
           boilerplate(
-            MediaQuery(
-              data: const MediaQueryData(),
+            const MediaQuery(
+              data: MediaQueryData(),
               child: MarkdownBody(
                 data: data,
                 styleSheet: MarkdownStyleSheet(
-                  tableColumnWidth: const FixedColumnWidth(150),
+                  tableColumnWidth: FixedColumnWidth(150),
                 ),
               ),
             ),

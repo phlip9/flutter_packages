@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// Defines which [TextStyle] objects to use for which Markdown elements.
 class MarkdownStyleSheet {
   /// Creates an explicit mapping of [TextStyle] objects to Markdown elements.
-  MarkdownStyleSheet({
+  const MarkdownStyleSheet({
     this.a,
     this.p,
     this.pPadding,
@@ -61,40 +61,8 @@ class MarkdownStyleSheet {
     this.blockquoteAlign = WrapAlignment.start,
     this.codeblockAlign = WrapAlignment.start,
     this.superscriptFontFeatureTag,
-    @Deprecated('Use textScaler instead.') this.textScaleFactor,
-    TextScaler? textScaler,
-  })  : assert(
-          textScaler == null || textScaleFactor == null,
-          'textScaleFactor is deprecated and cannot be specified when textScaler is specified.',
-        ),
-        textScaler = textScaler ??
-            // Internally, only textScaler is used, so convert the scale factor
-            // to a linear scaler.
-            (textScaleFactor == null
-                ? null
-                : TextScaler.linear(textScaleFactor)),
-        _styles = <String, TextStyle?>{
-          'a': a,
-          'p': p,
-          'li': p,
-          'code': code,
-          'pre': p,
-          'h1': h1,
-          'h2': h2,
-          'h3': h3,
-          'h4': h4,
-          'h5': h5,
-          'h6': h6,
-          'em': em,
-          'strong': strong,
-          'del': del,
-          'blockquote': blockquote,
-          'img': img,
-          'table': p,
-          'th': tableHead,
-          'tr': tableBody,
-          'td': tableBody,
-        };
+    this.textScaler,
+  });
 
   /// Creates a [MarkdownStyleSheet] from the [TextStyle]s in the provided [ThemeData].
   factory MarkdownStyleSheet.fromTheme(ThemeData theme) {
@@ -398,19 +366,8 @@ class MarkdownStyleSheet {
     WrapAlignment? blockquoteAlign,
     WrapAlignment? codeblockAlign,
     String? superscriptFontFeatureTag,
-    @Deprecated('Use textScaler instead.') double? textScaleFactor,
     TextScaler? textScaler,
   }) {
-    assert(
-      textScaler == null || textScaleFactor == null,
-      'textScaleFactor is deprecated and cannot be specified when textScaler is specified.',
-    );
-    // If either of textScaler or textScaleFactor is non-null, pass null for the
-    // other instead of the previous value, since only one is allowed.
-    final TextScaler? newTextScaler =
-        textScaler ?? (textScaleFactor == null ? this.textScaler : null);
-    final double? nextTextScaleFactor =
-        textScaleFactor ?? (textScaler == null ? this.textScaleFactor : null);
     return MarkdownStyleSheet(
       a: a ?? this.a,
       p: p ?? this.p,
@@ -467,8 +424,7 @@ class MarkdownStyleSheet {
       codeblockAlign: codeblockAlign ?? this.codeblockAlign,
       superscriptFontFeatureTag:
           superscriptFontFeatureTag ?? this.superscriptFontFeatureTag,
-      textScaler: newTextScaler,
-      textScaleFactor: nextTextScaleFactor,
+      textScaler: textScaler ?? this.textScaler,
     );
   }
 
@@ -530,13 +486,8 @@ class MarkdownStyleSheet {
       orderedListAlign: other.orderedListAlign,
       blockquoteAlign: other.blockquoteAlign,
       codeblockAlign: other.codeblockAlign,
-      textScaleFactor: other.textScaleFactor,
       superscriptFontFeatureTag: other.superscriptFontFeatureTag,
-      // Only one of textScaler and textScaleFactor can be passed. If
-      // other.textScaleFactor is non-null, then the sheet was created with a
-      // textScaleFactor and the textScaler was derived from that, so should be
-      // ignored so that the textScaleFactor continues to be set.
-      textScaler: other.textScaleFactor == null ? other.textScaler : null,
+      textScaler: other.textScaler,
     );
   }
 
@@ -696,20 +647,34 @@ class MarkdownStyleSheet {
   /// The text scaler to use in textual elements.
   final TextScaler? textScaler;
 
-  /// The text scale factor to use in textual elements.
-  ///
-  /// This will be non-null only if the sheet was created with the deprecated
-  /// [textScaleFactor] instead of [textScaler].
-  @Deprecated('Use textScaler instead.')
-  final double? textScaleFactor;
-
   /// Custom font feature tag for font which does not support `sups'
   /// feature to create superscript in footnotes.
   final String? superscriptFontFeatureTag;
 
-  /// A [Map] from element name to the corresponding [TextStyle] object.
-  Map<String, TextStyle?> get styles => _styles;
-  Map<String, TextStyle?> _styles;
+  /// Return the [TextStyle] for the corresponding element tag.
+  TextStyle? style(final String tag) => switch (tag) {
+        'a' => a,
+        'p' => p,
+        'li' => p,
+        'code' => code,
+        'pre' => p,
+        'h1' => h1,
+        'h2' => h2,
+        'h3' => h3,
+        'h4' => h4,
+        'h5' => h5,
+        'h6' => h6,
+        'em' => em,
+        'strong' => strong,
+        'del' => del,
+        'blockquote' => blockquote,
+        'img' => img,
+        'table' => p,
+        'th' => tableHead,
+        'tr' => tableBody,
+        'td' => tableBody,
+        _ => null,
+      };
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
@@ -832,7 +797,6 @@ class MarkdownStyleSheet {
       blockquoteAlign,
       codeblockAlign,
       textScaler,
-      textScaleFactor,
       superscriptFontFeatureTag,
     ]);
   }

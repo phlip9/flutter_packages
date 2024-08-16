@@ -190,7 +190,7 @@ void defineTests() {
           const String data = 'Foo[^a]\n[^a]: Bar';
           await tester.pumpWidget(
             boilerplate(
-              MarkdownBody(
+              const MarkdownBody(
                 data: data,
                 styleSheet:
                     MarkdownStyleSheet(superscriptFontFeatureTag: 'numr'),
